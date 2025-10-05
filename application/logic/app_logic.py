@@ -1958,6 +1958,27 @@ class ApplicationLogic:
             if hasattr(args, 'od_mode') and args.od_mode:
                 self.app_settings.set("stage3_oscillation_detector_mode", args.od_mode)
                 self.logger.info(f"Stage 3 Oscillation Detector Mode: {args.od_mode}")
+            
+            # Set anchor tracking parameters if provided
+            if hasattr(args, 'anchor_alpha'):
+                self.app_settings.set("anchor_alpha", args.anchor_alpha)
+            if hasattr(args, 'anchor_adaptive'):
+                self.app_settings.set("anchor_adaptive", args.anchor_adaptive)
+            if hasattr(args, 'anchor_gap_tolerance'):
+                self.app_settings.set("anchor_gap_tolerance", args.anchor_gap_tolerance)
+            if hasattr(args, 'anchor_outlier_mult'):
+                self.app_settings.set("anchor_outlier_mult", args.anchor_outlier_mult)
+            if hasattr(args, 'anchor_percentile_window'):
+                self.app_settings.set("anchor_percentile_window", args.anchor_percentile_window)
+            if hasattr(args, 'anchor_tracker'):
+                self.app_settings.set("anchor_tracker", args.anchor_tracker)
+            if hasattr(args, 'anchor_min_warmup'):
+                self.app_settings.set("anchor_min_warmup", args.anchor_min_warmup)
+            
+            # Log anchor tracking configuration if any parameters were set
+            if hasattr(args, 'anchor_alpha'):
+                self.logger.info(f"Anchor Tracking: alpha={args.anchor_alpha}, adaptive={getattr(args, 'anchor_adaptive', False)}, "
+                               f"tracker={getattr(args, 'anchor_tracker', 'none')}, gap_tolerance={getattr(args, 'anchor_gap_tolerance', 10)}")
 
             # Overwrite mode: 2 for overwrite, 1 for skip if missing (default), 0 process all except own matching.
             self.batch_overwrite_mode = 2 if args.overwrite else 1

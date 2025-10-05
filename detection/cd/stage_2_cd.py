@@ -1794,6 +1794,85 @@ def pass_6_determine_distance(app, frames: List, segments: List, video_info: Dic
                 if box and box.track_id:
                     last_known_box_positions[box.track_id] = (box.cx, box.cy)
 
+
+def pass_6b_anchor_tracking_enhancement(app, frames: List, logger: Optional[logging.Logger]):
+    """
+    Phase A: Optional anchor tracking enhancement pass.
+    
+    Processes frame detections through anchor tracking system to generate
+    enhanced motion signal based on primary anchor (penis) tracking.
+    Only runs if anchor tracking is enabled in app settings.
+    """
+    if logger:
+        logger.debug("Starting Stage 2 Pass 6b: Anchor Tracking Enhancement")
+    
+    # Check if anchor tracking is available and enabled
+    try:
+        from application.signals.anchor_integration import (
+            create_anchor_integration, is_anchor_tracking_available
+        )
+    except ImportError:
+        if logger:
+            logger.debug("Anchor tracking not available, skipping enhancement")
+        return
+    
+    if not is_anchor_tracking_available():
+        if logger:
+            logger.debug("Anchor tracking modules not available")
+        return
+    
+    # Check if enabled via app settings (default: disabled for backward compatibility)
+    enable_anchor = False
+    if app and hasattr(app, 'app_settings'):
+        enable_anchor = app.app_settings.get('enable_anchor_tracking', False)
+    
+    if not enable_anchor:
+        if logger:
+            logger.debug("Anchor tracking disabled in settings")
+        return
+    
+    if logger:
+        logger.info("Anchor tracking enhancement enabled - processing frames")
+    
+    try:
+        # Create anchor integration
+        integration = create_anchor_integration(app, logger=logger, enable_anchor_tracking=True)
+        
+        if not integration.enabled:
+            if logger:
+                logger.warning("Anchor integration failed to initialize")
+            return
+        
+        # Process all frames through anchor tracking
+        for frame_obj in frames:
+            integration.process_frame_detections(frame_obj.frame_id, frame_obj)
+        
+        # Finalize and get metrics
+        metrics = integration.finalize(total_frames=len(frames))
+        
+        if metrics:
+            if logger:
+                logger.info(f"Anchor tracking metrics: coverage={metrics.coverage_ratio:.2%}, "
+                          f"jitter={metrics.jitter_score:.3f}, "
+                          f"range={metrics.normalization_range[0]:.1f}→{metrics.normalization_range[1]:.1f}")
+        
+        # Apply anchor positions to frame objects
+        # This will update funscript_distance with anchor-based values
+        applied = integration.apply_to_frame_objects(frames, fallback_to_legacy=True)
+        
+        if applied and logger:
+            logger.info("Applied anchor tracking positions to frame objects")
+        
+        # Store metrics in app for later retrieval
+        if app and hasattr(app, 'anchor_metrics'):
+            app.anchor_metrics = metrics
+        
+    except Exception as e:
+        if logger:
+            logger.error(f"Error in anchor tracking enhancement: {e}", exc_info=True)
+        # Don't fail the whole pipeline - just skip anchor enhancement
+
+
 def pass_7_smooth_and_normalize_distances(app, frames: List, funscript_frames: List, funscript_distances: List, logger: Optional[logging.Logger]):
     """ Stage 2 Pass 7 (denoising with SG) and Pass 9 (amplifying/normalizing per segment) combined """
     if logger:
@@ -2474,6 +2553,7 @@ def perform_contact_analysis(
         ("Step 6: Assign Positions & Segments", pass_4_assign_positions_and_segments),
         ("Step 7: Recalculate Chapter Heights", pass_5_recalculate_heights_post_aggregation),
         ("Step 8: Determine Frame Distances", pass_6_determine_distance),
+        ("Step 8b: Anchor Tracking (Optional)", pass_6b_anchor_tracking_enhancement),
         ("Step 9: Smooth & Normalize Distances", pass_7_smooth_and_normalize_distances),
     ]
     main_steps_list_funscript_gen = [
@@ -2513,6 +2593,8 @@ def perform_contact_analysis(
             step_func(app, frame_objects, segments, video_info_dict, yolo_input_size_arg, vr_vertical_third_filter_arg, logger)
         elif step_func == pass_6_determine_distance:
             step_func(app, frame_objects, segments, video_info_dict, yolo_input_size_arg, logger)
+        elif step_func == pass_6b_anchor_tracking_enhancement:
+            step_func(app, frame_objects, logger)
         elif step_func == pass_7_smooth_and_normalize_distances:
             step_func(app, frame_objects, funscript_frames, funscript_distances, logger)
         elif step_func == pass_8_simplify_signal:

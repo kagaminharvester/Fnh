@@ -7,6 +7,7 @@ import numpy as np
 import cv2
 import platform
 import sys
+import queue
 from typing import Optional, Iterator, Tuple, List, Dict, Any
 import logging
 import os
@@ -22,6 +23,100 @@ try:
     SCIPY_AVAILABLE_FOR_AUDIO = True
 except ImportError:
     SCIPY_AVAILABLE_FOR_AUDIO = False
+
+
+class FramePrefetcher:
+    """
+    Frame prefetching system for VideoProcessor.
+    
+    Reads frames ahead of the main processing thread to reduce decoding latency.
+    Currently a skeleton implementation for future GPU pinned memory integration.
+    """
+    
+    def __init__(self, max_queue_size: int = 8):
+        """
+        Initialize frame prefetcher.
+        
+        Args:
+            max_queue_size: Maximum number of frames to buffer
+        """
+        self.max_queue_size = max_queue_size
+        self.frame_queue: queue.Queue = queue.Queue(maxsize=max_queue_size)
+        self.stop_event = threading.Event()
+        self.prefetch_thread: Optional[threading.Thread] = None
+        self.enabled = False  # Disabled by default
+        
+    def start(self, frame_generator):
+        """
+        Start prefetching frames.
+        
+        Args:
+            frame_generator: Iterator that yields frames
+        """
+        if not self.enabled:
+            return
+        
+        self.stop_event.clear()
+        self.prefetch_thread = threading.Thread(
+            target=self._prefetch_worker,
+            args=(frame_generator,),
+            daemon=True
+        )
+        self.prefetch_thread.start()
+    
+    def _prefetch_worker(self, frame_generator):
+        """Worker thread that reads frames ahead of time."""
+        try:
+            for frame in frame_generator:
+                if self.stop_event.is_set():
+                    break
+                # TODO: Future enhancement - pin memory for GPU transfer
+                self.frame_queue.put(frame, timeout=1.0)
+        except Exception as e:
+            logging.getLogger(__name__).debug(f"Prefetch worker error: {e}")
+        finally:
+            # Signal end of stream
+            try:
+                self.frame_queue.put(None, timeout=1.0)
+            except queue.Full:
+                pass
+    
+    def get_frame(self, timeout: float = 1.0) -> Optional[np.ndarray]:
+        """
+        Get next prefetched frame.
+        
+        Args:
+            timeout: Maximum time to wait for frame
+            
+        Returns:
+            Frame array or None if no frame available
+        """
+        if not self.enabled:
+            return None
+        
+        try:
+            frame = self.frame_queue.get(timeout=timeout)
+            return frame
+        except queue.Empty:
+            return None
+    
+    def stop(self):
+        """Stop prefetching and clean up."""
+        self.stop_event.set()
+        if self.prefetch_thread and self.prefetch_thread.is_alive():
+            self.prefetch_thread.join(timeout=2.0)
+        
+        # Clear queue
+        while not self.frame_queue.empty():
+            try:
+                self.frame_queue.get_nowait()
+            except queue.Empty:
+                break
+    
+    def __del__(self):
+        """Cleanup on deletion."""
+        self.stop()
+
 
 class VideoProcessor:
     def __init__(self, app_instance, tracker: Optional[type] = None, yolo_input_size=640,
@@ -112,6 +207,11 @@ class VideoProcessor:
         self.frame_cache_max_size = cache_size
         self.frame_cache_lock = threading.Lock()
         self.batch_fetch_size = 600
+        
+        # Frame prefetching (disabled by default, for future GPU optimization)
+        self.enable_prefetch = False
+        self.frame_prefetcher: Optional[FramePrefetcher] = None
+        # TODO: Enable prefetch with GPU pinned memory for faster transfers
         
         # Single FFmpeg dual-output processor integration
         from video.dual_frame_processor import SingleFFmpegDualOutputProcessor

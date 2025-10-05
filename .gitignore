@@ -3,6 +3,11 @@
 /logs/*
 config.json
 
+# FunGen cache files
+.fungen_env_cache.json
+.fungen_cache/
+*.profile.json
+
 # Test and audit files that shouldn't be in the repo
 test_timeline_fixes.py
 test_complete_ua_fix.py
@@ -189,7 +194,9 @@ cython_debug/
 *.funscript
 __pycache__
 *.pyc
-*.md
+# Ignore markdown except in docs/
+/*.md
+!README.md
 *.ini
 settings.json
 autosave.fgnstate

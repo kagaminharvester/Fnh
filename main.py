@@ -173,6 +173,13 @@ def main():
     parser.add_argument('--no-copy', action='store_false', dest='copy', help='Do not save a copy of the final funscript next to the video file (will save to output folder only).')
     parser.add_argument('--generate-roll', action='store_true', help='Generate secondary axis (.roll.funscript) file for supported multi-axis devices.')
     parser.add_argument('--recursive', '-r', action='store_true', help='If input_path is a folder, process it recursively.')
+    
+    # Performance and profiling options
+    parser.add_argument('--profile', type=str, metavar='NAME', help='Profile name for logging (future: load json config).')
+    parser.add_argument('--precision', choices=['auto', 'fp32', 'fp16'], default='auto', help='Model precision mode (default: auto).')
+    parser.add_argument('--batch-size', type=int, default=1, metavar='N', help='Batch size for processing (experimental, default: 1).')
+    parser.add_argument('--reuse-detections', action='store_true', help='Attempt to load cached Stage 1 detection results if available.')
+    parser.add_argument('--profile-run', action='store_true', help='Generate JSON performance profile at end of processing.')
 
     args = parser.parse_args()
 

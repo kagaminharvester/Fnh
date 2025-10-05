@@ -4,11 +4,17 @@ import os
 import shutil
 import platform
 import logging
+import json
+import hashlib
+import time
 from importlib.metadata import version, PackageNotFoundError
 from packaging import version as pkg_version
 from packaging.specifiers import SpecifierSet
 
 logger = logging.getLogger(__name__)
+
+ENV_CACHE_FILE = ".fungen_env_cache.json"
+CACHE_VALIDITY_HOURS = 24
 
 def _parse_package_spec(package_spec):
     """
@@ -101,6 +107,95 @@ def is_tool(name):
     """Check whether `name` is on PATH and marked as executable."""
     return shutil.which(name) is not None
 
+
+def _compute_requirements_hash(core_file: str, gpu_file: str) -> str:
+    """Compute MD5 hash of requirements files."""
+    hasher = hashlib.md5()
+    
+    try:
+        if os.path.exists(core_file):
+            with open(core_file, 'rb') as f:
+                hasher.update(f.read())
+        
+        if gpu_file != core_file and os.path.exists(gpu_file):
+            with open(gpu_file, 'rb') as f:
+                hasher.update(f.read())
+    except Exception as e:
+        logger.debug(f"Error computing requirements hash: {e}")
+    
+    return hasher.hexdigest()
+
+
+def _load_env_cache() -> dict:
+    """Load environment cache from file."""
+    if not os.path.exists(ENV_CACHE_FILE):
+        return {}
+    
+    try:
+        with open(ENV_CACHE_FILE, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        logger.debug(f"Failed to load environment cache: {e}")
+        return {}
+
+
+def _save_env_cache(cache_data: dict):
+    """Save environment cache to file."""
+    try:
+        with open(ENV_CACHE_FILE, 'w') as f:
+            json.dump(cache_data, f, indent=2)
+        logger.debug(f"Environment cache saved to {ENV_CACHE_FILE}")
+    except Exception as e:
+        logger.warning(f"Failed to save environment cache: {e}")
+
+
+def _is_cache_valid(cache_data: dict, requirements_hash: str) -> bool:
+    """Check if cached environment data is still valid."""
+    if not cache_data:
+        return False
+    
+    # Check timestamp
+    timestamp = cache_data.get('timestamp', 0)
+    age_hours = (time.time() - timestamp) / 3600
+    if age_hours >= CACHE_VALIDITY_HOURS:
+        logger.debug(f"Cache expired (age: {age_hours:.1f}h)")
+        return False
+    
+    # Check requirements hash
+    if cache_data.get('requirements_hash') != requirements_hash:
+        logger.debug("Requirements files changed")
+        return False
+    
+    # Check Python version
+    current_python = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    if cache_data.get('python_version') != current_python:
+        logger.debug(f"Python version changed: {cache_data.get('python_version')} -> {current_python}")
+        return False
+    
+    return True
+
+
+def _get_gpu_info() -> dict:
+    """Get GPU name and driver version (lightweight, cached-friendly)."""
+    gpu_info = {"name": "Unknown", "driver": "Unknown"}
+    
+    try:
+        result = subprocess.run(
+            ['nvidia-smi', '--query-gpu=name,driver_version', '--format=csv,noheader,nounits'],
+            capture_output=True, text=True, timeout=5
+        )
+        if result.returncode == 0:
+            lines = result.stdout.strip().split('\n')
+            if lines:
+                parts = lines[0].split(',')
+                if len(parts) >= 2:
+                    gpu_info['name'] = parts[0].strip()
+                    gpu_info['driver'] = parts[1].strip()
+    except Exception:
+        pass
+    
+    return gpu_info
+
 def detect_gpu_environment():
     """
     Detects the GPU environment and returns the appropriate requirements file.
@@ -155,7 +250,11 @@ def check_and_install_dependencies(*, non_interactive: bool = True, auto_install
     """
     Checks for and installs missing dependencies.
     This function is designed to be run before the main application starts.
+    Supports caching to skip expensive checks when environment hasn't changed.
     """
+    # Check for force override
+    force_check = os.environ.get('FUNGEN_FORCE_DEP_CHECK', '0') == '1'
+    
     # 1. Self-bootstrap: Ensure the checker has its own dependencies
     # Note: send2trash is included because it's imported by application.utils.__init__.py -> generated_file_manager.py
     bootstrap_changed = _ensure_packages(['requests', 'tqdm', 'packaging', 'send2trash'], pip_args=None, non_interactive=non_interactive, auto_install=auto_install)
@@ -163,6 +262,45 @@ def check_and_install_dependencies(*, non_interactive: bool = True, auto_install
     logger.info("=== Checking Application Dependencies ===")
 
     # 2. Detect GPU environment and select appropriate requirements
+    requirements_file, env_description = detect_gpu_environment()
+    logger.debug(f"Detected environment: {env_description}")
+    logger.debug(f"Using requirements file: {requirements_file}")
+    
+    # 3. Compute requirements hash
+    requirements_hash = _compute_requirements_hash('core.requirements.txt', requirements_file)
+    
+    # 4. Check cache validity
+    cache_data = _load_env_cache()
+    cache_valid = _is_cache_valid(cache_data, requirements_hash) and not force_check
+    
+    if cache_valid:
+        logger.info("Environment cache is valid, performing fast dependency check")
+        # Fast path: only check critical packages exist
+        critical_packages = ['torch', 'ultralytics', 'numpy', 'cv2']
+        all_present = True
+        for pkg_name in critical_packages:
+            try:
+                if pkg_name == 'cv2':
+                    __import__('cv2')
+                else:
+                    version(pkg_name)
+            except (PackageNotFoundError, ImportError):
+                logger.info(f"Critical package {pkg_name} missing, falling back to full check")
+                all_present = False
+                break
+        
+        if all_present:
+            # Check ffmpeg/ffprobe (fast check)
+            if is_tool('ffmpeg') and is_tool('ffprobe'):
+                logger.info("=== Dependency Check Finished (cached) ===\n")
+                return
+            else:
+                logger.info("ffmpeg/ffprobe not found, continuing to full check")
+    
+    if force_check:
+        logger.info("FUNGEN_FORCE_DEP_CHECK=1, performing full dependency check")
+    
+    # 5. Full dependency check path
     requirements_file, env_description = detect_gpu_environment()
     logger.debug(f"Detected environment: {env_description}")
     logger.debug(f"Using requirements file: {requirements_file}")
@@ -237,6 +375,25 @@ def check_and_install_dependencies(*, non_interactive: bool = True, auto_install
     # 7. Check for ffmpeg, ffprobe, and ffplay (auto-install if needed)
     check_ffmpeg_ffprobe(non_interactive=non_interactive, auto_install=auto_install)
 
+    # 8. Update environment cache on successful completion
+    try:
+        torch_ver = version('torch')
+    except PackageNotFoundError:
+        torch_ver = 'unknown'
+    
+    gpu_info = _get_gpu_info()
+    
+    new_cache = {
+        'timestamp': time.time(),
+        'python_version': f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+        'torch_version': torch_ver,
+        'gpu_name': gpu_info['name'],
+        'gpu_driver': gpu_info['driver'],
+        'requirements_hash': requirements_hash,
+        'env_description': env_description
+    }
+    _save_env_cache(new_cache)
+
     logger.info("=== Dependency Check Finished ===\n")
 
 
@@ -246,18 +403,15 @@ def check_ffmpeg_ffprobe(*, non_interactive: bool = True, auto_install: bool = F
     ffprobe_missing = not is_tool('ffprobe')
     ffplay_missing = not is_tool('ffplay')
 
-    if ffmpeg_missing or ffprobe_missing or ffplay_missing:
+    if ffmpeg_missing or ffprobe_missing:
         missing_tools = []
         if ffmpeg_missing:
             missing_tools.append('ffmpeg')
         if ffprobe_missing:
             missing_tools.append('ffprobe')
-        if ffplay_missing:
-            missing_tools.append('ffplay')
         
-        logger.warning(f"The following required tools are not found in your system's PATH: {', '.join(missing_tools)}.")
-        if 'ffplay' in missing_tools:
-            logger.warning("ffplay is required for fullscreen video functionality with audio support.")
+        logger.error(f"REQUIRED tools are not found in your system's PATH: {', '.join(missing_tools)}.")
+        logger.error("These tools are essential for video processing.")
         
         system = platform.system()
         install_cmd = ""
@@ -278,7 +432,7 @@ def check_ffmpeg_ffprobe(*, non_interactive: bool = True, auto_install: bool = F
                     if auto_install:
                         logger.info(f"Attempting non-interactive install: {install_cmd}")
                         subprocess.check_call(install_cmd, shell=True)
-                        if not is_tool('ffmpeg') or not is_tool('ffprobe') or not is_tool('ffplay'):
+                        if not is_tool('ffmpeg') or not is_tool('ffprobe'):
                             logger.error("Installation may have failed. Please install ffmpeg suite manually.")
                             sys.exit(1)
                         else:
@@ -292,7 +446,7 @@ def check_ffmpeg_ffprobe(*, non_interactive: bool = True, auto_install: bool = F
                         logger.info(f"Running installation command: {install_cmd}")
                         subprocess.check_call(install_cmd, shell=True)
                         # Re-check after installation
-                        if not is_tool('ffmpeg') or not is_tool('ffprobe') or not is_tool('ffplay'):
+                        if not is_tool('ffmpeg') or not is_tool('ffprobe'):
                             logger.error("Installation may have failed. Please install ffmpeg suite manually.")
                             sys.exit(1)
                         else:
@@ -313,6 +467,11 @@ def check_ffmpeg_ffprobe(*, non_interactive: bool = True, auto_install: bool = F
             sys.exit(1)
     else:
         logger.info("ffmpeg and ffprobe are available.")
+    
+    # Warn about ffplay but don't exit
+    if ffplay_missing:
+        logger.warning("ffplay is not found. Video playback with audio may not work in some features.")
+        logger.warning("Install ffmpeg suite to get ffplay (usually bundled together).")
 
 
 def _check_device_control_dependencies(*, non_interactive: bool = True, auto_install: bool = True):

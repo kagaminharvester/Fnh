@@ -15,6 +15,7 @@ from application.utils.checkpoint_manager import (
     get_checkpoint_manager, initialize_checkpoint_manager
 )
 from application.gui_components.dynamic_tracker_ui import get_dynamic_tracker_ui
+from application.perf.profiler import PerfSession
 
 import detection.cd.stage_1_cd as stage1_module
 import detection.cd.stage_2_cd as stage2_module
@@ -1065,38 +1066,43 @@ class AppStageProcessor:
                                   num_producers_override: Optional[int] = None,
                                   num_consumers_override: Optional[int] = None,
                                   is_autotune_run: bool = False) -> Dict[str, Any]:
-        self.gui_event_queue.put(("stage1_status_update", "Running S1...", "Initializing S1..."))
-        fm = self.app.file_manager
-        self.stage1_frame_queue_size = 0
-        self.stage1_result_queue_size = 0
-
-        logger_config_for_stage1 = {
-            'main_logger': self.logger,
-            'log_file': self.app.app_log_file_path,
-            'log_level': self.logger.level
-        }
+        # Start profiling if enabled
+        if self.app.enable_profiling:
+            PerfSession.start("stage1")
+        
         try:
-            if not stage1_module:
-                self.gui_event_queue.put(("stage1_status_update", "Error - S1 Module not loaded.", "Error"))
-                return {"success": False, "max_fps": 0.0}
+            self.gui_event_queue.put(("stage1_status_update", "Running S1...", "Initializing S1..."))
+            fm = self.app.file_manager
+            self.stage1_frame_queue_size = 0
+            self.stage1_result_queue_size = 0
 
-            #preprocessed_video_path = None
-            #if self.save_preprocessed_video:
-            #    preprocessed_video_path = fm.get_output_path_for_file(fm.video_path, "_preprocessed.mkv")
+            logger_config_for_stage1 = {
+                'main_logger': self.logger,
+                'log_file': self.app.app_log_file_path,
+                'log_level': self.logger.level
+            }
+            try:
+                if not stage1_module:
+                    self.gui_event_queue.put(("stage1_status_update", "Error - S1 Module not loaded.", "Error"))
+                    return {"success": False, "max_fps": 0.0}
 
-            # Preprocessed video is now optional.
-            preprocessed_video_path = fm.get_output_path_for_file(fm.video_path, "_preprocessed.mkv")
+                #preprocessed_video_path = None
+                #if self.save_preprocessed_video:
+                #    preprocessed_video_path = fm.get_output_path_for_file(fm.video_path, "_preprocessed.mkv")
 
-            num_producers = num_producers_override if num_producers_override is not None else self.num_producers_stage1
-            num_consumers = num_consumers_override if num_consumers_override is not None else self.num_consumers_stage1
+                # Preprocessed video is now optional.
+                preprocessed_video_path = fm.get_output_path_for_file(fm.video_path, "_preprocessed.mkv")
 
-            result_path, max_fps = stage1_module.perform_yolo_analysis(
-                video_path_arg=fm.video_path,
-                yolo_model_path_arg=self.app.yolo_det_model_path,
-                yolo_pose_model_path_arg=self.app.yolo_pose_model_path,
-                confidence_threshold=self.app.tracker.confidence_threshold,
-                progress_callback=self.on_stage1_progress, # Use the public attribute
-                stop_event_external=self.stop_stage_event,
+                num_producers = num_producers_override if num_producers_override is not None else self.num_producers_stage1
+                num_consumers = num_consumers_override if num_consumers_override is not None else self.num_consumers_stage1
+
+                result_path, max_fps = stage1_module.perform_yolo_analysis(
+                    video_path_arg=fm.video_path,
+                    yolo_model_path_arg=self.app.yolo_det_model_path,
+                    yolo_pose_model_path_arg=self.app.yolo_pose_model_path,
+                    confidence_threshold=self.app.tracker.confidence_threshold,
+                    progress_callback=self.on_stage1_progress, # Use the public attribute
+                    stop_event_external=self.stop_stage_event,
                 num_producers_arg=num_producers,
                 num_consumers_arg=num_consumers,
                 hwaccel_method_arg=self.app.hardware_acceleration_method,
@@ -1137,6 +1143,10 @@ class AppStageProcessor:
                               extra={'status_message': True})
             self.gui_event_queue.put(("stage1_status_update", f"S1 Error - {str(e)}", "Error"))
             return {"success": False, "max_fps": 0.0, "preprocessed_video_path": None}
+        finally:
+            # Stop profiling if enabled
+            if self.app.enable_profiling:
+                PerfSession.stop("stage1")
     
     def _load_existing_stage2_data(self, stage2_data_info: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """
@@ -1489,34 +1499,39 @@ class AppStageProcessor:
             return []
 
     def _execute_stage2_logic(self, s2_overlay_output_path: Optional[str], generate_funscript_actions: bool = True, is_ranged_data_source: bool = False) -> Dict[str, Any]:
-        self.gui_event_queue.put(("stage2_status_update", "Checking existing S2...", "Validating"))
+        # Start profiling if enabled
+        if self.app.enable_profiling:
+            PerfSession.start("stage2")
         
-        fm = self.app.file_manager
-        
-        # Check if we can skip Stage 2 by reusing existing assets
-        if not self.force_rerun_stage2_segmentation:
-            from application.utils.stage_output_validator import can_skip_stage2_for_stage3
+        try:
+            self.gui_event_queue.put(("stage2_status_update", "Checking existing S2...", "Validating"))
             
-            # Get the correct output folder where Stage 2 files are stored
-            output_folder = os.path.dirname(fm.get_output_path_for_file(fm.video_path, "_dummy.tmp"))
+            fm = self.app.file_manager
             
-            # Pass project-saved database path if available for priority checking
-            project_db_path = getattr(self.app, 's2_sqlite_db_path', None)
-            can_skip, stage2_data = can_skip_stage2_for_stage3(fm.video_path, False, output_folder, self.logger, project_db_path)
-            
-            if can_skip:
-                self.logger.info("Stage 2 assets found and validated - skipping Stage 2 processing")
-                self.gui_event_queue.put(("stage2_status_update", "Reusing existing S2...", "Loading cached results"))
+            # Check if we can skip Stage 2 by reusing existing assets
+            if not self.force_rerun_stage2_segmentation:
+                from application.utils.stage_output_validator import can_skip_stage2_for_stage3
                 
-                # Load existing Stage 2 data
-                existing_data = self._load_existing_stage2_data(stage2_data)
-                if existing_data:
-                    # Update progress to show completion
-                    self.gui_event_queue.put(("stage2_dual_progress", (6, 6, "Loaded from cache"), (1, 1, "Complete")))
-                    self.gui_event_queue.put(("stage2_status_update", "S2 Complete (Cached)", "Loaded from cache"))
+                # Get the correct output folder where Stage 2 files are stored
+                output_folder = os.path.dirname(fm.get_output_path_for_file(fm.video_path, "_dummy.tmp"))
+                
+                # Pass project-saved database path if available for priority checking
+                project_db_path = getattr(self.app, 's2_sqlite_db_path', None)
+                can_skip, stage2_data = can_skip_stage2_for_stage3(fm.video_path, False, output_folder, self.logger, project_db_path)
+                
+                if can_skip:
+                    self.logger.info("Stage 2 assets found and validated - skipping Stage 2 processing")
+                    self.gui_event_queue.put(("stage2_status_update", "Reusing existing S2...", "Loading cached results"))
                     
-                    if s2_overlay_output_path and os.path.exists(s2_overlay_output_path):
-                        self.gui_event_queue.put(("load_s2_overlay", s2_overlay_output_path, None))
+                    # Load existing Stage 2 data
+                    existing_data = self._load_existing_stage2_data(stage2_data)
+                    if existing_data:
+                        # Update progress to show completion
+                        self.gui_event_queue.put(("stage2_dual_progress", (6, 6, "Loaded from cache"), (1, 1, "Complete")))
+                        self.gui_event_queue.put(("stage2_status_update", "S2 Complete (Cached)", "Loaded from cache"))
+                        
+                        if s2_overlay_output_path and os.path.exists(s2_overlay_output_path):
+                            self.gui_event_queue.put(("load_s2_overlay", s2_overlay_output_path, None))
                     
                     # Process the existing Stage 2 data through results processing
                     # In CLI mode, directly process instead of using GUI event queue
@@ -1641,20 +1656,29 @@ class AppStageProcessor:
             error_msg = f"S2 Exception: {str(e)}"
             self.gui_event_queue.put(("stage2_status_update", error_msg, "Error"))
             return {"success": False, "error": error_msg}
+        finally:
+            # Stop profiling if enabled
+            if self.app.enable_profiling:
+                PerfSession.stop("stage2")
 
     def _execute_stage3_optical_flow_module(self, segments_objects: List[Any], preprocessed_video_path: Optional[str]) -> bool:
         """ Wrapper to call the new Stage 3 OF module. """
-        fs_proc = self.app.funscript_processor
+        # Start profiling if enabled
+        if self.app.enable_profiling:
+            PerfSession.start("stage3")
+        
+        try:
+            fs_proc = self.app.funscript_processor
 
-        if not self.app.file_manager.video_path:
-            self.logger.error("Stage 3: Video path not available.")
-            self.gui_event_queue.put(("stage3_status_update", "Error: Video path missing", "Error"))
-            return False
+            if not self.app.file_manager.video_path:
+                self.logger.error("Stage 3: Video path not available.")
+                self.gui_event_queue.put(("stage3_status_update", "Error: Video path missing", "Error"))
+                return False
 
-        if not stage3_module:  # Check if the imported module is valid
-            self.logger.error("Stage 3: Optical Flow processing module (stage3_module) not loaded.")
-            self.gui_event_queue.put(("stage3_status_update", "Error: S3 Module missing", "Error"))
-            return False
+            if not stage3_module:  # Check if the imported module is valid
+                self.logger.error("Stage 3: Optical Flow processing module (stage3_module) not loaded.")
+                self.gui_event_queue.put(("stage3_status_update", "Error: S3 Module missing", "Error"))
+                return False
 
         tracker_config_s3 = {
             "confidence_threshold": self.app_settings.get('tracker_confidence_threshold', 0.4),  # Example name
@@ -1794,11 +1818,20 @@ class AppStageProcessor:
             self.logger.error(f"Stage 3 execution failed: {error_msg}")
             self.gui_event_queue.put(("stage3_status_update", f"S3 Failed: {error_msg}", "Failed"))
             return None
+        finally:
+            # Stop profiling if enabled
+            if self.app.enable_profiling:
+                PerfSession.stop("stage3")
 
     def _execute_stage3_mixed_module(self, segments_objects: List[Any], preprocessed_video_path: Optional[str], s2_output_data: Dict[str, Any] = None) -> Optional[Dict[str, Any]]:
         """Execute Mixed Stage 3 processing using stage_3_mixed_processor if available."""
-        if stage3_mixed_module is None:
-            self.logger.error("Stage 3 Mixed module not available.")
+        # Start profiling if enabled (reuse stage3 label for mixed mode)
+        if self.app.enable_profiling:
+            PerfSession.start("stage3")
+        
+        try:
+            if stage3_mixed_module is None:
+                self.logger.error("Stage 3 Mixed module not available.")
             return None
         fs_proc = self.app.funscript_processor
         fm = self.app.file_manager
@@ -1838,6 +1871,10 @@ class AppStageProcessor:
         except Exception as e:
             self.logger.error(f"Stage 3 Mixed execution failed: {e}", exc_info=True)
             return None
+        finally:
+            # Stop profiling if enabled
+            if self.app.enable_profiling:
+                PerfSession.stop("stage3")
 
     def abort_stage_processing(self):
         if self.full_analysis_active and self.stage_thread and self.stage_thread.is_alive():

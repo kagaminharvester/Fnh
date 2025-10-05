@@ -2,6 +2,8 @@ import logging
 import inspect
 import subprocess
 import os
+import json
+from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from config import constants
 
@@ -108,6 +110,29 @@ class ColoredFormatter(logging.Formatter):
         return formatter.format(record)
 
 
+class JsonFormatter(logging.Formatter):
+    """
+    A formatter that outputs logs as JSON lines.
+    Enabled by setting FUNGEN_LOG_FORMAT=json environment variable.
+    """
+    
+    def format(self, record):
+        log_obj = {
+            'timestamp': datetime.utcfromtimestamp(record.created).isoformat() + 'Z',
+            'level': record.levelname,
+            'message': record.getMessage(),
+            'module': record.module,
+            'function': record.funcName,
+            'line': record.lineno,
+        }
+        
+        # Include exception info if present
+        if record.exc_info:
+            log_obj['exception'] = self.formatException(record.exc_info)
+        
+        return json.dumps(log_obj)
+
+
 class AppLogger:
     """
     A wrapper class to simplify the creation and configuration of a logger.
@@ -131,11 +156,17 @@ class AppLogger:
         # Clear any existing handlers to prevent duplicates from previous runs or basicConfig.
         if self.logger.hasHandlers():
             self.logger.handlers.clear()
+        
+        # Check if JSON log format is requested
+        use_json_format = os.environ.get('FUNGEN_LOG_FORMAT', '').lower() == 'json'
 
-        # Console Handler with colors
+        # Console Handler with colors or JSON
         ch = logging.StreamHandler()
         ch.setLevel(level)
-        ch.setFormatter(ColoredFormatter())
+        if use_json_format:
+            ch.setFormatter(JsonFormatter())
+        else:
+            ch.setFormatter(ColoredFormatter())
         self.logger.addHandler(ch)
 
         # File Handler (optional)

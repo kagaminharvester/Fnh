@@ -173,6 +173,15 @@ def main():
     parser.add_argument('--no-copy', action='store_false', dest='copy', help='Do not save a copy of the final funscript next to the video file (will save to output folder only).')
     parser.add_argument('--generate-roll', action='store_true', help='Generate secondary axis (.roll.funscript) file for supported multi-axis devices.')
     parser.add_argument('--recursive', '-r', action='store_true', help='If input_path is a folder, process it recursively.')
+    
+    # Phase A: Anchor tracking parameters
+    parser.add_argument('--anchor-alpha', type=float, default=0.25, help='Base EMA smoothing alpha for anchor tracking (0=max smoothing, 1=no smoothing). Default: 0.25')
+    parser.add_argument('--anchor-adaptive', action='store_true', help='Enable adaptive smoothing for anchor tracking (adjusts based on motion velocity).')
+    parser.add_argument('--anchor-gap-tolerance', type=int, default=10, help='Maximum frames to interpolate missing anchor detections. Default: 10')
+    parser.add_argument('--anchor-outlier-mult', type=float, default=4.0, help='MAD multiplier for outlier detection. Default: 4.0')
+    parser.add_argument('--anchor-percentile-window', type=int, default=120, help='Window size for rolling percentile normalization. Default: 120')
+    parser.add_argument('--anchor-tracker', choices=['none', 'simple', 'bytetrack', 'ocs'], default='none', help='Anchor object tracker type. Default: none')
+    parser.add_argument('--anchor-min-warmup', type=int, default=80, help='Minimum warmup frames before normalization. Default: 80')
 
     args = parser.parse_args()
 

@@ -194,7 +194,9 @@ cython_debug/
 *.funscript
 __pycache__
 *.pyc
-*.md
+# Ignore markdown except in docs/
+/*.md
+!README.md
 *.ini
 settings.json
 autosave.fgnstate

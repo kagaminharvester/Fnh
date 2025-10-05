@@ -15,6 +15,8 @@ from tracker.tracker_manager import create_tracker_manager
 
 from application.classes import AppSettings, ProjectManager, ShortcutManager, UndoRedoManager
 from application.utils import AppLogger, check_write_access, AutoUpdater, VideoSegment
+from application.utils.precision import PrecisionPolicy
+from application.perf.profiler import PerfSession
 from config.constants import DEFAULT_MODELS_DIR, FUNSCRIPT_METADATA_VERSION, PROJECT_FILE_EXTENSION, MODEL_DOWNLOAD_URLS
 from config.tracker_discovery import get_tracker_discovery
 from pathlib import Path
@@ -111,6 +113,9 @@ def cli_stage3_progress_callback(current_chapter_idx, total_chapters, chapter_na
 
 
 class ApplicationLogic:
+    # Class-level lock for thread-safe caching operations
+    _cache_lock = threading.RLock()
+    
     def __init__(self, is_cli: bool = False):
         self.is_cli_mode = is_cli # Store the mode
         self.gui_instance = None
@@ -120,6 +125,7 @@ class ApplicationLogic:
         self.logging_level_setting = self.app_settings.get("logging_level", "INFO")
 
         self.cached_class_names: Optional[List[str]] = None
+        self._models_checked = False  # Track if models have been validated
 
         status_log_config = {
             logging.INFO: 3.0, logging.WARNING: 6.0, logging.ERROR: 10.0, logging.CRITICAL: 15.0,
@@ -241,6 +247,14 @@ class ApplicationLogic:
         self.yolo_det_model_path = self.yolo_detection_model_path_setting
         self.yolo_pose_model_path = self.yolo_pose_model_path_setting
         self.yolo_input_size = 640
+        
+        # --- Performance & Profiling Configuration ---
+        self.precision_mode = "auto"  # Will be overridden by CLI args if provided
+        self.precision_policy: Optional[PrecisionPolicy] = None
+        self.batch_size = 1  # Default batch size
+        self.reuse_detections = False  # Detection cache reuse flag
+        self.enable_profiling = False  # Profiling flag
+        self.profile_name: Optional[str] = None  # Profile identifier
 
         # --- Undo/Redo Managers ---
         self.undo_manager_t1: Optional[UndoRedoManager] = None
@@ -1450,44 +1464,46 @@ class ApplicationLogic:
         Temporarily loads the detection model to get class names, then unloads it.
         This populates self.cached_class_names. It's a blocking operation.
         It will first try to get names from an already-loaded tracker model to be efficient.
+        Thread-safe with re-entrant lock.
         """
-        # If cache is already populated, do nothing.
-        if self.cached_class_names is not None:
-            return
+        with self._cache_lock:
+            # If cache is already populated, do nothing.
+            if self.cached_class_names is not None:
+                return
 
-        # If a model is already loaded for active tracking, use its class names.
-        if self.tracker and hasattr(self.tracker, '_current_tracker') and self.tracker._current_tracker:
-            current_tracker = self.tracker._current_tracker
-            if hasattr(current_tracker, 'yolo_model') and current_tracker.yolo_model and hasattr(current_tracker.yolo_model, 'names'):
-                self.logger.info("Model already loaded for tracking, using its class names for cache.")
-                model_names = current_tracker.yolo_model.names
+            # If a model is already loaded for active tracking, use its class names.
+            if self.tracker and hasattr(self.tracker, '_current_tracker') and self.tracker._current_tracker:
+                current_tracker = self.tracker._current_tracker
+                if hasattr(current_tracker, 'yolo_model') and current_tracker.yolo_model and hasattr(current_tracker.yolo_model, 'names'):
+                    self.logger.info("Model already loaded for tracking, using its class names for cache.")
+                    model_names = current_tracker.yolo_model.names
+                    if isinstance(model_names, dict):
+                        self.cached_class_names = sorted(list(model_names.values()))
+                    elif isinstance(model_names, list):
+                        self.cached_class_names = sorted(model_names)
+                    else:
+                        self.logger.warning("Tracker model names format not recognized while caching.")
+                    return
+
+            model_path = self.yolo_det_model_path
+            if not model_path or not os.path.exists(model_path):
+                self.logger.info("Cannot cache tracking classes: Detection model path not set or invalid.")
+                self.cached_class_names = []  # Cache as empty to prevent re-attempts.
+                return
+
+            try:
+                self.logger.info(f"Temporarily loading model to cache class names: {os.path.basename(model_path)}")
+                # This is the potentially slow operation that can freeze the UI.
+                temp_model = YOLO(model_path)
+                model_names = temp_model.names
+
                 if isinstance(model_names, dict):
                     self.cached_class_names = sorted(list(model_names.values()))
                 elif isinstance(model_names, list):
                     self.cached_class_names = sorted(model_names)
                 else:
-                    self.logger.warning("Tracker model names format not recognized while caching.")
-                return
-
-        model_path = self.yolo_det_model_path
-        if not model_path or not os.path.exists(model_path):
-            self.logger.info("Cannot cache tracking classes: Detection model path not set or invalid.")
-            self.cached_class_names = []  # Cache as empty to prevent re-attempts.
-            return
-
-        try:
-            self.logger.info(f"Temporarily loading model to cache class names: {os.path.basename(model_path)}")
-            # This is the potentially slow operation that can freeze the UI.
-            temp_model = YOLO(model_path)
-            model_names = temp_model.names
-
-            if isinstance(model_names, dict):
-                self.cached_class_names = sorted(list(model_names.values()))
-            elif isinstance(model_names, list):
-                self.cached_class_names = sorted(model_names)
-            else:
-                self.logger.warning("Model loaded for caching, but names format not recognized.")
-                self.cached_class_names = []  # Cache as empty
+                    self.logger.warning("Model loaded for caching, but names format not recognized.")
+                    self.cached_class_names = []  # Cache as empty
 
             self.logger.info("Class names cached successfully.")
             del temp_model  # Explicitly release the model object
@@ -1562,6 +1578,10 @@ class ApplicationLogic:
 
     def _check_model_paths(self):
         """Checks essential model paths and auto-downloads if missing."""
+        # Early return if models already validated
+        if self._models_checked:
+            return True
+        
         models_missing = False
         
         # Detection model remains essential
@@ -1595,6 +1615,7 @@ class ApplicationLogic:
             else:
                 self.logger.info("Detection model successfully configured!", extra={'status_message': True, 'duration': 3.0})
         
+        self._models_checked = True
         return True
 
     def set_application_logging_level(self, level_name: str):
@@ -1895,6 +1916,34 @@ class ApplicationLogic:
 
         try:
             self.logger.info("Running in Command-Line Interface (CLI) mode.")
+            
+            # Process performance and profiling arguments
+            if hasattr(args, 'precision'):
+                self.precision_mode = args.precision
+                self.logger.info(f"Precision mode: {self.precision_mode}")
+            
+            if hasattr(args, 'batch_size'):
+                self.batch_size = args.batch_size
+                if self.batch_size > 1:
+                    self.logger.info(f"Batch size: {self.batch_size} (experimental)")
+            
+            if hasattr(args, 'reuse_detections'):
+                self.reuse_detections = args.reuse_detections
+                if self.reuse_detections:
+                    self.logger.info("Detection cache reuse enabled")
+            
+            if hasattr(args, 'profile_run'):
+                self.enable_profiling = args.profile_run
+                if self.enable_profiling:
+                    self.logger.info("Performance profiling enabled")
+                    PerfSession.reset()  # Start fresh profiling session
+            
+            if hasattr(args, 'profile') and args.profile:
+                self.profile_name = args.profile
+                self.logger.info(f"Profile name: {self.profile_name}")
+            
+            # Initialize precision policy
+            self.precision_policy = PrecisionPolicy(mode=self.precision_mode)
 
             # Check if we're in funscript processing mode
             if hasattr(args, 'funscript_mode') and args.funscript_mode:
@@ -2019,6 +2068,17 @@ class ApplicationLogic:
             self._run_batch_processing_thread()
 
             self.logger.info("CLI processing has finished.")
+            
+            # Export performance profile if enabled
+            if self.enable_profiling:
+                try:
+                    # Export to first video's path with .profile.json extension
+                    if video_paths:
+                        profile_path = os.path.splitext(video_paths[0])[0] + ".profile.json"
+                        PerfSession.export_json(profile_path)
+                        self.logger.info(f"Performance profile saved to: {profile_path}")
+                except Exception as e:
+                    self.logger.warning(f"Failed to export performance profile: {e}")
 
         finally:
             if console_handler and original_log_level is not None:

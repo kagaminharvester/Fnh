@@ -173,6 +173,56 @@ def main():
     parser.add_argument('--no-copy', action='store_false', dest='copy', help='Do not save a copy of the final funscript next to the video file (will save to output folder only).')
     parser.add_argument('--generate-roll', action='store_true', help='Generate secondary axis (.roll.funscript) file for supported multi-axis devices.')
     parser.add_argument('--recursive', '-r', action='store_true', help='If input_path is a folder, process it recursively.')
+    
+    # Phase B+C: Multi-object tracking options
+    parser.add_argument('--multi-tracker', choices=['auto', 'bytetrack', 'ocsort', 'none'], default='auto',
+                       help='Multi-object tracking strategy (default: auto)')
+    parser.add_argument('--gap-tolerance', type=int, default=5,
+                       help='Max frames to interpolate for disappeared objects (default: 5)')
+    
+    # Phase B+C: Motion projection options
+    parser.add_argument('--anchor-relative', action='store_true',
+                       help='Enable anchor-relative motion projection')
+    parser.add_argument('--roll-axis', action='store_true',
+                       help='Enable secondary axis (roll) generation via projection')
+    parser.add_argument('--axis-window', type=int, default=30,
+                       help='Sliding window size for axis PCA (default: 30)')
+    parser.add_argument('--roll-threshold', type=float, default=0.15,
+                       help='Minimum variance for roll detection (default: 0.15)')
+    
+    # Phase B+C: Performance pipeline options
+    parser.add_argument('--batch-size', type=int, default=None,
+                       help='Inference batch size (default: 4 on CUDA, 1 on CPU)')
+    parser.add_argument('--decode-queue-size', type=int, default=16,
+                       help='Decode queue size (default: 16)')
+    parser.add_argument('--inference-timeout-ms', type=int, default=12,
+                       help='Inference batch timeout in milliseconds (default: 12)')
+    parser.add_argument('--max-pipeline-lag', type=int, default=24,
+                       help='Maximum pipeline lag in frames (default: 24)')
+    
+    # Phase B+C: TensorRT options
+    parser.add_argument('--tensorrt', action='store_true',
+                       help='Use TensorRT engine if available')
+    parser.add_argument('--tensorrt-build', action='store_true',
+                       help='Build TensorRT engine (forces rebuild if exists)')
+    parser.add_argument('--precision', choices=['fp16', 'fp32', 'int8'], default='fp16',
+                       help='TensorRT precision mode (default: fp16)')
+    
+    # Phase B+C: Detection cache options
+    parser.add_argument('--reuse-detections', action='store_true',
+                       help='Reuse cached detections from previous run')
+    parser.add_argument('--no-cache', action='store_true',
+                       help='Disable detection cache')
+    
+    # Phase B+C: Filter optimization
+    parser.add_argument('--optimize-filters', action='store_true', default=True,
+                       help='Enable filter chain optimization (default: True)')
+    parser.add_argument('--no-filter-opt', action='store_false', dest='optimize_filters',
+                       help='Disable filter chain optimization')
+    
+    # Phase B+C: Profiling
+    parser.add_argument('--profile-run', action='store_true',
+                       help='Enable detailed profiling with JSON output')
 
     args = parser.parse_args()
 

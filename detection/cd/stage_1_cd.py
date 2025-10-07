@@ -12,6 +12,7 @@ import logging
 from typing import Optional, Tuple, List
 import subprocess
 from queue import Queue as StdLibQueue
+import torch
 
 from video import VideoProcessor
 from config import constants
@@ -569,9 +570,6 @@ def _get_optimized_model_path(model_path: str, logger: logging.Logger) -> str:
     """
     if not model_path.endswith(".pt"):
         return model_path
-
-    import torch
-    from ultralytics import YOLO
 
     # Check for NVIDIA GPU and CUDA availability
     if not (torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 7):

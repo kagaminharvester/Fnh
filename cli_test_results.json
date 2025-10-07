@@ -1,0 +1,482 @@
+[
+  {
+    "test_name": "beat_marker",
+    "mode": "beat_marker",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Checking core packages...\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - All required packages are installed and up to date.\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - PyTorch (torch and torchvision) is installed.\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - ffmpeg and ffprobe are available.\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "beat_marker_no-autotune",
+    "mode": "beat_marker",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "axis_projection_enhanced",
+    "mode": "axis_projection_enhanced",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "axis_projection_enhanced_no-autotune",
+    "mode": "axis_projection_enhanced",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "hybrid_intelligence",
+    "mode": "hybrid_intelligence",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "hybrid_intelligence_no-autotune",
+    "mode": "hybrid_intelligence",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "oscillation_experimental_2",
+    "mode": "oscillation_experimental_2",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "oscillation_experimental_2_no-autotune",
+    "mode": "oscillation_experimental_2",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "oscillation",
+    "mode": "oscillation",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "oscillation_no-autotune",
+    "mode": "oscillation",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "osc",
+    "mode": "osc",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "osc_no-autotune",
+    "mode": "osc",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "live-osc",
+    "mode": "live-osc",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "live-osc_no-autotune",
+    "mode": "live-osc",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "oscillation-experimental",
+    "mode": "oscillation-experimental",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "oscillation-experimental_no-autotune",
+    "mode": "oscillation-experimental",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "oscillation_legacy",
+    "mode": "oscillation_legacy",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "oscillation_legacy_no-autotune",
+    "mode": "oscillation_legacy",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "oscillation-legacy",
+    "mode": "oscillation-legacy",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "oscillation-legacy_no-autotune",
+    "mode": "oscillation-legacy",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "relative_distance",
+    "mode": "relative_distance",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "relative_distance_no-autotune",
+    "mode": "relative_distance",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "relative_distance_bkp",
+    "mode": "relative_distance_bkp",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "relative_distance_bkp_no-autotune",
+    "mode": "relative_distance_bkp",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "user_roi",
+    "mode": "user_roi",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "user_roi_no-autotune",
+    "mode": "user_roi",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "axis_projection_working",
+    "mode": "axis_projection_working",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "axis_projection_working_no-autotune",
+    "mode": "axis_projection_working",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "yolo_roi",
+    "mode": "yolo_roi",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "yolo_roi_no-autotune",
+    "mode": "yolo_roi",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "yolo",
+    "mode": "yolo",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "yolo_no-autotune",
+    "mode": "yolo",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "live-yolo",
+    "mode": "live-yolo",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "live-yolo_no-autotune",
+    "mode": "live-yolo",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "auto-roi",
+    "mode": "auto-roi",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "auto-roi_no-autotune",
+    "mode": "auto-roi",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "OFFLINE_2_STAGE",
+    "mode": "OFFLINE_2_STAGE",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "OFFLINE_2_STAGE_no-autotune",
+    "mode": "OFFLINE_2_STAGE",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "OFFLINE_3_STAGE_MIXED",
+    "mode": "OFFLINE_3_STAGE_MIXED",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "OFFLINE_3_STAGE_MIXED_no-autotune",
+    "mode": "OFFLINE_3_STAGE_MIXED",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "OFFLINE_3_STAGE_MIXED_od-legacy",
+    "mode": "OFFLINE_3_STAGE_MIXED",
+    "autotune": true,
+    "od_mode": "legacy",
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "OFFLINE_3_STAGE_MIXED_no-autotune_od-legacy",
+    "mode": "OFFLINE_3_STAGE_MIXED",
+    "autotune": false,
+    "od_mode": "legacy",
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "OFFLINE_3_STAGE",
+    "mode": "OFFLINE_3_STAGE",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "OFFLINE_3_STAGE_no-autotune",
+    "mode": "OFFLINE_3_STAGE",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "OFFLINE_3_STAGE_od-legacy",
+    "mode": "OFFLINE_3_STAGE",
+    "autotune": true,
+    "od_mode": "legacy",
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "OFFLINE_3_STAGE_no-autotune_od-legacy",
+    "mode": "OFFLINE_3_STAGE",
+    "autotune": false,
+    "od_mode": "legacy",
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "dot_marker",
+    "mode": "dot_marker",
+    "autotune": true,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  },
+  {
+    "test_name": "dot_marker_no-autotune",
+    "mode": "dot_marker",
+    "autotune": false,
+    "od_mode": null,
+    "success": false,
+    "return_code": 1,
+    "stdout": "",
+    "stderr": "\u001b[32m[unknown@5a3a339] - INFO     - === Checking Application Dependencies ===\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Environment cache is valid, performing fast dependency check\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - === Dependency Check Finished (cached) ===\n\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker stopped at final positions: P=100.0, S=50.0\u001b[0m\n\u001b[32m[unknown@5a3a339] - INFO     - Hybrid Intelligence Tracker cleaned up\u001b[0m\nTraceback (most recent call last):\n  File \"/app/main.py\", line 201, in <module>\n    main()\n  File \"/app/main.py\", line 196, in main\n    run_cli(args)\n  File \"/app/main.py\", line 109, in run_cli\n    from application.logic.app_logic import ApplicationLogic\n  File \"/app/application/logic/__init__.py\", line 10, in <module>\n    from .app_logic import ApplicationLogic\n  File \"/app/application/logic/app_logic.py\", line 1511\n    self.logger.error(f\"Failed to temporarily load model '{model_path}' to cache class names: {e}\", exc_info=True)\n    ^^^^\nIndentationError: expected an indented block after 'except' statement on line 1510\n"
+  }
+]

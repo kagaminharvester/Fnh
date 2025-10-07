@@ -1505,10 +1505,9 @@ class ApplicationLogic:
                     self.logger.warning("Model loaded for caching, but names format not recognized.")
                     self.cached_class_names = []  # Cache as empty
 
-            self.logger.info("Class names cached successfully.")
-            del temp_model  # Explicitly release the model object
-
-        except Exception as e:
+                self.logger.info("Class names cached successfully.")
+                del temp_model  # Explicitly release the model object
+            except Exception as e:
             self.logger.error(f"Failed to temporarily load model '{model_path}' to cache class names: {e}", exc_info=True)
             self.cached_class_names = []  # Cache as empty on failure to prevent retries.
 

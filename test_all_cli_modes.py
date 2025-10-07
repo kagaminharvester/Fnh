@@ -69,12 +69,19 @@ def run_test(test_video_path, output_dir, mode, autotune=True, od_mode=None):
     print(f"{'='*60}")
     
     try:
+        # Set PYTHONPATH to include the project root
+        env = os.environ.copy()
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '.'))
+        env['PYTHONPATH'] = project_root + os.pathsep + env.get('PYTHONPATH', '')
+        env['FUNGEN_TESTING'] = '1'
+        env['FUNGEN_OUTPUT_DIR'] = output_dir
+
         result = subprocess.run(
             cmd,
             capture_output=True,
             text=True,
             timeout=120,  # Increased timeout
-            env={**os.environ, "FUNGEN_TESTING": "1", "FUNGEN_OUTPUT_DIR": output_dir}
+            env=env
         )
         
         error_occurred = result.returncode != 0

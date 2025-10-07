@@ -12,6 +12,16 @@ This project is still at the early stages of development. It is not intended for
 
 ---
 
+## New Feature: Automatic TensorRT Optimization for NVIDIA GPUs
+
+FunGen now automatically detects compatible NVIDIA GPUs and generates an optimized TensorRT engine for significantly faster performance.
+
+- **Automatic Conversion**: Converts `.pt` models to `.engine` files on the first run.
+- **Seamless Performance Boost**: No manual steps required to get the best speed on your hardware.
+- **User-Friendly**: A one-time optimization process with clear feedback.
+
+---
+
 ## New Feature: Automatic System Scaling Support
 
 FunGen now automatically detects your system's display scaling settings (DPI) and adjusts the UI accordingly. This feature works on Windows, macOS, and Linux, ensuring the application looks crisp and properly sized on high-DPI displays.
@@ -147,10 +157,10 @@ We support multiple model formats across Windows, macOS, and Linux.
 - Mac: we recommend .mlmodel
 
 ### Models
-- **.pt (PyTorch)**: Requires CUDA (for NVIDIA GPUs) or ROCm (for AMD GPUs) for acceleration.
-- **.onnx (ONNX Runtime)**: Best for CPU users as it offers broad compatibility and efficiency.
-- **.engine (TensorRT)**: For NVIDIA GPUs: Provides very significant efficiency improvements (this file needs to be build by running "Generate TensorRT.bat" after adding the base ".pt" model to the models directory)
-- **.mlpackage (Core ML)**: Optimized for macOS users. Runs efficiently on Apple devices with Core ML.
+- **.pt (PyTorch)**: The standard model format, compatible with both NVIDIA (CUDA) and AMD (ROCm) GPUs.
+- **.onnx (ONNX Runtime)**: Ideal for CPU-based inference, offering broad compatibility and efficiency.
+- **.engine (TensorRT)**: A highly optimized format for NVIDIA GPUs that provides a significant performance boost. FunGen will automatically generate this file for you on compatible systems.
+- **.mlpackage (Core ML)**: Optimized for macOS, running efficiently on Apple's Neural Engine.
 
 In most cases, the app will automatically detect the best model from your models directory at launch, but if the right model wasn't present at this time or the right dependencies where not installed, you might need to override it under settings. The same applies when we release a new version of the model.
 

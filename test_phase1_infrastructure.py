@@ -12,16 +12,20 @@ import tempfile
 def test_cli_help():
     """Test that CLI help shows new flags."""
     print("Testing CLI help output...")
-    result = subprocess.run(
-        [sys.executable, "main.py", "--help"],
-        capture_output=True,
-        text=True,
-        timeout=30
-    )
-    
-    help_text = result.stdout
-    
-    # Check for new flags
+    try:
+        result = subprocess.run(
+            [sys.executable, "main.py", "--help"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=True
+        )
+        help_text = result.stdout
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
+        error_output = e.stderr if hasattr(e, 'stderr') else 'No stderr captured.'
+        print(f"❌ FAILED: Could not get help output. Error: {e}\n{error_output}")
+        return False
+
     required_flags = [
         "--profile",
         "--precision",
@@ -30,10 +34,7 @@ def test_cli_help():
         "--profile-run"
     ]
     
-    missing = []
-    for flag in required_flags:
-        if flag not in help_text:
-            missing.append(flag)
+    missing = [flag for flag in required_flags if flag not in help_text]
     
     if missing:
         print(f"❌ FAILED: Missing flags in help: {missing}")

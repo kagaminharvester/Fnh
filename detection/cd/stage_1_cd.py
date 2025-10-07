@@ -555,6 +555,56 @@ def video_processor_producer_proc(
         effective_logger_final.info(
             f"[S1 VP Producer-{producer_idx}] Fully Exited. Final count of frames put to queue: {frames_count_final}. Stop event: {stop_event_local.is_set()}")
 
+
+def _get_optimized_model_path(model_path: str, logger: logging.Logger) -> str:
+    """
+    Checks for a TensorRT-optimized version of a YOLO model and generates it if needed.
+
+    Args:
+        model_path: Path to the .pt model file.
+        logger: Logger instance for progress updates.
+
+    Returns:
+        Path to the best available model file (.engine or .pt).
+    """
+    if not model_path.endswith(".pt"):
+        return model_path
+
+    import torch
+    from ultralytics import YOLO
+
+    # Check for NVIDIA GPU and CUDA availability
+    if not (torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 7):
+        logger.info("NVIDIA GPU with CUDA capability >= 7.0 not found. Using default .pt model.")
+        return model_path
+
+    engine_path = model_path.replace(".pt", ".engine")
+
+    if os.path.exists(engine_path):
+        logger.info(f"Found existing TensorRT engine. Using: {os.path.basename(engine_path)}")
+        return engine_path
+
+    logger.warning(f"TensorRT engine not found. Generating a new one for your GPU. This is a one-time process and may take several minutes...")
+    logger.warning("The application may appear unresponsive during this time. Please be patient.")
+
+    try:
+        # Load the base model
+        model = YOLO(model_path)
+        # Export to TensorRT
+        model.export(format="engine", device=constants.DEVICE)
+
+        if os.path.exists(engine_path):
+            logger.info(f"Successfully generated TensorRT engine: {os.path.basename(engine_path)}")
+            return engine_path
+        else:
+            logger.error("TensorRT engine generation failed. The .engine file was not created. Falling back to .pt model.")
+            return model_path
+    except Exception as e:
+        logger.error(f"An error occurred during TensorRT engine generation: {e}", exc_info=True)
+        logger.error("Falling back to the default .pt model.")
+        return model_path
+
+
 def consumer_proc(frame_queue, result_queue, consumer_idx, yolo_det_model_path, yolo_pose_model_path,
                   confidence_threshold, yolo_input_size_consumer, queue_monitor_local, stop_event_local,
                   logger_config_for_consumer: Optional[dict] = None, video_fps: float = 30.0):
@@ -563,13 +613,17 @@ def consumer_proc(frame_queue, result_queue, consumer_idx, yolo_det_model_path, 
 
     det_model, pose_model = None, None
     try:
-        # Load BOTH models in the same worker
-        consumer_logger.info(f"[S1 Consumer-{consumer_idx}] Loading models...")
-        det_model = YOLO(yolo_det_model_path, task='detect')
+        # Optimize and load models
+        consumer_logger.info(f"[S1 Consumer-{consumer_idx}] Optimizing and loading models...")
 
-        # Force CPU for pose model on Apple MPS to avoid known bugs ?
+        # Get potentially optimized paths
+        optimized_det_path = _get_optimized_model_path(yolo_det_model_path, consumer_logger)
+        optimized_pose_path = _get_optimized_model_path(yolo_pose_model_path, consumer_logger)
+
+        det_model = YOLO(optimized_det_path, task='detect')
+        pose_model = YOLO(optimized_pose_path, task='pose')
+
         pose_device = constants.DEVICE
-        pose_model = YOLO(yolo_pose_model_path, task='pose')
         consumer_logger.info(
             f"[S1 Consumer-{consumer_idx}] Models loaded. Detection on '{constants.DEVICE}', Pose on '{pose_device}'.")
 

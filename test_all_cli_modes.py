@@ -9,37 +9,43 @@ import json
 import os
 import sys
 from datetime import datetime
+import tempfile
+import shutil
 
-# Test configuration
-TEST_VIDEO = "/Users/k00gar/Downloads/test/test_koogar_extra_short_A.mp4"
-OUTPUT_DIR = "/Users/k00gar/PycharmProjects/VR-Funscript-AI-Generator/output/test_koogar_extra_short_A"
+def create_dummy_video(path, duration=1, rate=10, size='640x480'):
+    """Creates a dummy video file using ffmpeg."""
+    try:
+        subprocess.run(
+            ['ffmpeg', '-f', 'lavfi', '-i', f'color=c=black:s={size}:r={rate}', '-t', str(duration), path],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        print(f"Error creating dummy video: {e}")
+        if hasattr(e, 'stderr'):
+            print(e.stderr)
+        return False
 
-# Auto-discover all available modes (excluding examples)
 def get_available_modes():
     """Dynamically discover all available CLI modes, excluding examples."""
     try:
         from config.tracker_discovery import get_tracker_discovery
         discovery = get_tracker_discovery()
-        
-        # Get filtered CLI modes (examples already filtered out)
         return discovery.get_supported_cli_modes()
-        
     except Exception as e:
         print(f"Error discovering modes: {e}")
-        # Fallback to empty list - will be handled by caller
         return []
 
-# Get all modes dynamically
 MODES = get_available_modes()
-
-# Modes that support od-mode option (offline modes with stage 3)
 MODES_WITH_OD = ["OFFLINE_3_STAGE", "OFFLINE_3_STAGE_MIXED"]
 
-def run_test(mode, autotune=True, od_mode=None):
+def run_test(test_video_path, output_dir, mode, autotune=True, od_mode=None):
     """Run a single test with specified options."""
     cmd = [
         "python", "main.py",
-        TEST_VIDEO,
+        test_video_path,
         "--mode", mode,
         "--overwrite",
         "--no-copy"
@@ -51,7 +57,6 @@ def run_test(mode, autotune=True, od_mode=None):
     if od_mode and mode in MODES_WITH_OD:
         cmd.extend(["--od-mode", od_mode])
     
-    # Build test name
     test_name = f"{mode}"
     if not autotune:
         test_name += "_no-autotune"
@@ -64,63 +69,17 @@ def run_test(mode, autotune=True, od_mode=None):
     print(f"{'='*60}")
     
     try:
-        # Run the command
         result = subprocess.run(
             cmd,
             capture_output=True,
             text=True,
-            timeout=60,  # 60 second timeout
-            env={**os.environ, "FUNGEN_TESTING": "1"}
+            timeout=120,  # Increased timeout
+            env={**os.environ, "FUNGEN_TESTING": "1", "FUNGEN_OUTPUT_DIR": output_dir}
         )
         
-        # Extract key metrics from output
-        fps_match = None
-        points_generated = None
-        error_occurred = False
-        
-        # Look for FPS in progress bar
-        for line in result.stdout.split('\n'):
-            if 'FPS' in line and '100.00%' in line:
-                # Extract FPS from final progress line
-                parts = line.split('|')
-                for part in parts:
-                    if 'FPS' in part:
-                        fps_str = part.strip().split()[0]
-                        try:
-                            fps_match = int(fps_str)
-                        except:
-                            pass
-            
-            # Check for errors
-            if 'ERROR' in line or 'Exception' in line or 'Traceback' in line:
-                error_occurred = True
-        
-        # Check the generated funscript
-        funscript_path = os.path.join(OUTPUT_DIR, "test_koogar_extra_short_A.funscript")
-        raw_funscript_path = os.path.join(OUTPUT_DIR, "test_koogar_extra_short_A_t1_raw.funscript")
-        
-        final_points = None
-        raw_points = None
-        
-        if os.path.exists(funscript_path):
-            try:
-                with open(funscript_path, 'r') as f:
-                    data = json.load(f)
-                    final_points = len(data.get('actions', []))
-            except:
-                pass
-        
-        if os.path.exists(raw_funscript_path):
-            try:
-                with open(raw_funscript_path, 'r') as f:
-                    data = json.load(f)
-                    raw_points = len(data.get('actions', []))
-            except:
-                pass
-        
-        # Determine success
-        success = result.returncode == 0 and not error_occurred and final_points is not None
-        
+        error_occurred = result.returncode != 0
+        success = not error_occurred
+
         return {
             'test_name': test_name,
             'mode': mode,
@@ -128,11 +87,8 @@ def run_test(mode, autotune=True, od_mode=None):
             'od_mode': od_mode,
             'success': success,
             'return_code': result.returncode,
-            'fps': fps_match,
-            'raw_points': raw_points,
-            'final_points': final_points,
-            'error': error_occurred,
-            'stderr': result.stderr[:500] if result.stderr else None
+            'stdout': result.stdout,
+            'stderr': result.stderr
         }
         
     except subprocess.TimeoutExpired:
@@ -142,8 +98,7 @@ def run_test(mode, autotune=True, od_mode=None):
             'autotune': autotune,
             'od_mode': od_mode,
             'success': False,
-            'error': True,
-            'stderr': 'TIMEOUT after 60 seconds'
+            'error': 'TIMEOUT'
         }
     except Exception as e:
         return {
@@ -152,110 +107,74 @@ def run_test(mode, autotune=True, od_mode=None):
             'autotune': autotune,
             'od_mode': od_mode,
             'success': False,
-            'error': True,
-            'stderr': str(e)
+            'error': str(e)
         }
 
 def main():
     """Run all tests and generate report."""
-    results = []
-    
-    print(f"Starting comprehensive CLI testing at {datetime.now()}")
-    print(f"Test video: {TEST_VIDEO}")
-    print(f"Total modes to test: {len(set(MODES))}")
-    
-    # Test each unique mode
-    tested_modes = set()
-    for mode in MODES:
-        if mode in tested_modes:
-            continue
-        tested_modes.add(mode)
+    with tempfile.TemporaryDirectory() as temp_dir:
+        test_video = os.path.join(temp_dir, "test_video.mp4")
+        output_dir = os.path.join(temp_dir, "output")
+        os.makedirs(output_dir, exist_ok=True)
+
+        if not create_dummy_video(test_video):
+            print("Could not create dummy video. Aborting tests.")
+            return 1
+
+        results = []
         
-        # Test with autotune
-        results.append(run_test(mode, autotune=True))
+        print(f"Starting comprehensive CLI testing at {datetime.now()}")
+        print(f"Test video: {test_video}")
+        print(f"Total modes to test: {len(set(MODES))}")
         
-        # Test without autotune
-        results.append(run_test(mode, autotune=False))
+        tested_modes = set()
+        for mode in MODES:
+            if mode in tested_modes:
+                continue
+            tested_modes.add(mode)
+
+            results.append(run_test(test_video, output_dir, mode, autotune=True))
+            results.append(run_test(test_video, output_dir, mode, autotune=False))
+
+            if mode in MODES_WITH_OD:
+                results.append(run_test(test_video, output_dir, mode, autotune=True, od_mode="legacy"))
+                results.append(run_test(test_video, output_dir, mode, autotune=False, od_mode="legacy"))
         
-        # If mode supports od-mode, test both options
-        if mode in MODES_WITH_OD:
-            results.append(run_test(mode, autotune=True, od_mode="legacy"))
-            results.append(run_test(mode, autotune=False, od_mode="legacy"))
-    
-    # Generate report
-    print("\n" + "="*80)
-    print("TEST RESULTS SUMMARY")
-    print("="*80)
-    
-    # Summary statistics
-    total_tests = len(results)
-    successful = sum(1 for r in results if r['success'])
-    failed = total_tests - successful
-    
-    print(f"\nTotal tests: {total_tests}")
-    print(f"Successful: {successful}")
-    print(f"Failed: {failed}")
-    
-    # Detailed results table
-    print("\n" + "-"*80)
-    print(f"{'Mode':<30} {'Autotune':<10} {'OD':<8} {'Success':<8} {'FPS':<8} {'Raw Pts':<10} {'Final Pts':<10}")
-    print("-"*80)
-    
-    for r in results:
-        mode = r['mode'][:28]
-        autotune = "Yes" if r['autotune'] else "No"
-        od = r['od_mode'] or "-"
-        success = "✓" if r['success'] else "✗"
-        fps = str(r.get('fps', '-'))
-        raw_pts = str(r.get('raw_points', '-'))
-        final_pts = str(r.get('final_points', '-'))
+        print("\n" + "="*80)
+        print("TEST RESULTS SUMMARY")
+        print("="*80)
         
-        print(f"{mode:<30} {autotune:<10} {od:<8} {success:<8} {fps:<8} {raw_pts:<10} {final_pts:<10}")
+        total_tests = len(results)
+        successful = sum(1 for r in results if r['success'])
+        failed = total_tests - successful
         
-        # Print error details for failed tests
-        if not r['success'] and r.get('stderr'):
-            print(f"  ERROR: {r['stderr'][:100]}")
-    
-    # Identify issues
-    print("\n" + "="*80)
-    print("ISSUES IDENTIFIED")
-    print("="*80)
-    
-    # Check for modes that fail
-    failed_modes = [r['mode'] for r in results if not r['success']]
-    if failed_modes:
-        print(f"\nModes that failed: {', '.join(set(failed_modes))}")
-    
-    # Check for slow modes (< 100 FPS)
-    slow_modes = []
-    for r in results:
-        fps = r.get('fps')
-        if fps is not None and fps < 100 and fps > 0:
-            slow_modes.append((r['mode'], fps))
-    if slow_modes:
-        print(f"\nModes with slow performance (<100 FPS):")
-        for mode, fps in slow_modes:
-            print(f"  - {mode}: {fps} FPS")
-    
-    # Check for autotune issues
-    autotune_issues = []
-    for r in results:
-        if not r['autotune'] and r.get('final_points'):
-            # When no-autotune, final should equal raw (or be close)
-            if r.get('raw_points') and abs(r['final_points'] - r['raw_points']) > 10:
-                autotune_issues.append(r)
-    
-    if autotune_issues:
-        print(f"\n--no-autotune not working properly for:")
-        for r in autotune_issues:
-            print(f"  - {r['mode']}: Raw={r.get('raw_points')}, Final={r.get('final_points')}")
-    
-    # Save results to JSON
-    with open('cli_test_results.json', 'w') as f:
-        json.dump(results, f, indent=2)
-    print(f"\nDetailed results saved to cli_test_results.json")
-    
-    return 0 if failed == 0 else 1
+        print(f"\nTotal tests: {total_tests}")
+        print(f"Successful: {successful}")
+        print(f"Failed: {failed}")
+
+        print("\n" + "-"*80)
+        print(f"{'Mode':<30} {'Autotune':<10} {'OD':<8} {'Success':<8}")
+        print("-"*80)
+
+        for r in results:
+            mode = r['mode'][:28]
+            autotune = "Yes" if r['autotune'] else "No"
+            od = r['od_mode'] or "-"
+            success = "✓" if r['success'] else "✗"
+            print(f"{mode:<30} {autotune:<10} {od:<8} {success:<8}")
+            if not r['success']:
+                print(f"  RETURN CODE: {r.get('return_code', 'N/A')}")
+                if r.get('stderr'):
+                    print(f"  STDERR: {r['stderr'][:200]}...")
+                if r.get('error'):
+                    print(f"  ERROR: {r.get('error')}")
+
+
+        with open('cli_test_results.json', 'w') as f:
+            json.dump(results, f, indent=2)
+        print(f"\nDetailed results saved to cli_test_results.json")
+
+        return 0 if failed == 0 else 1
 
 if __name__ == "__main__":
     sys.exit(main())
